@@ -1,0 +1,11 @@
+Package: jp.r-plus.apptweeter
+Name: AppTweeter
+Depends: mobilesubstrate, firmware (>= 5.0)
+Version: 0.1
+Architecture: iphoneos-arm
+Description: Tweet about app infomation from AppStore
+Maintainer: r_plus
+Author: r_plus <anasthasia.r+apptweeter@gmail.com>
+Section: Tweaks
+dev: rplus
+Icon: file:///Library/PreferenceLoader/Preferences/AppTweeter@2x.png
