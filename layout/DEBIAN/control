@@ -1,6 +1,6 @@
 Package: jp.r-plus.apptweeter
 Name: AppTweeter
-Depends: mobilesubstrate, firmware (>= 5.0)
+Depends: mobilesubstrate, preferenceloader, firmware (>= 5.0)
 Version: 0.1
 Architecture: iphoneos-arm
 Description: Tweet about app infomation from AppStore
