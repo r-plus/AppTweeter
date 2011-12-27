@@ -40,6 +40,7 @@ static BOOL sendMail = NO;
     [pageView tweetFired];
   }
   [self release];
+  self = nil;
 }
 @end
 
