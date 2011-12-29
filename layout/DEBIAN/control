@@ -1,11 +1,17 @@
 Package: jp.r-plus.apptweeter
 Name: AppTweeter
 Depends: mobilesubstrate, preferenceloader, firmware (>= 5.0)
-Version: 0.1
+Conflicts: gsc.ipad | gsc.wildcat
+Priority: optional
+Version: 0.2
 Architecture: iphoneos-arm
 Description: Tweet about app infomation from AppStore
-Maintainer: r_plus
 Author: r_plus <anasthasia.r+apptweeter@gmail.com>
 Section: Tweaks
 dev: rplus
 Icon: file:///Library/PreferenceLoader/Preferences/AppTweeter@2x.png
+Homepage: http://moreinfo.thebigboss.org/moreinfo/depiction.php?file=apptweeterDp
+Depiction: http://moreinfo.thebigboss.org/moreinfo/depiction.php?file=apptweeterDp
+Sponsor: thebigboss.org <http://thebigboss.org>
+Maintainer: BigBoss <bigboss@thebigboss.org>
+Tag: purpose::extension

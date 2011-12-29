@@ -114,14 +114,21 @@ static BOOL sendMail = NO;
   BOOL addRating = ratingExist ? [ratingExist boolValue] : NO;
   // string
   NSMutableString *initialString = [NSMutableString stringWithFormat:@"%@ v%@ %@", appName, version, price];
-  if (addAuthor && author != NULL)
+  if (addAuthor && author != NULL && [initialString length] + 4 + [author length] < 87)
     [initialString appendFormat:@" by %@", author];
-  if (addAppSize)
+  if (addAppSize && [initialString length] + [[NSString stringWithFormat:@" %1.1f%@", appSizeSI, SIByte] length] < 87)
     [initialString appendFormat:@" %1.1f%@", appSizeSI, SIByte];
-  if (addMinOS)
-    [initialString appendFormat:@" Required iOS%@", minOS];
-  if (addRating)
+  if (addMinOS) {
+    if ([initialString length] + [[NSString stringWithFormat:@" Required iOS%@", minOS] length] < 87)
+      [initialString appendFormat:@" Required iOS%@", minOS];
+    else if ( [initialString length] + [[NSString stringWithFormat:@" Req iOS%@", minOS] length] < 87)
+      [initialString appendFormat:@" Req iOS%@", minOS];
+  }
+  if (addRating && [initialString length] + 8 + [rating length] < 87)
     [initialString appendFormat:@" Rating %@", rating];
+  if ([initialString length] > 87)
+    [initialString deleteCharactersInRange:NSMakeRange(87, [initialString length] - 87)];
+  [initialString appendFormat:@" #AppTw"];
   // tweet code from libactivator
   tweetComposer = [[objc_getClass("TWTweetComposeViewController") alloc] init];
   if (!tweetComposer)
@@ -142,11 +149,14 @@ static BOOL sendMail = NO;
     [tweetComposer addImage:applicationImage];
   [tweetComposer addURL:url];
   // FIXME: does not set text just length. Why?
+  [tweetComposer setInitialText:initialString];
+  /*
   while (![tweetComposer setInitialText:initialString]) {
     //NSLog(@"string length = %d", [initialString length]);
     //NSLog(@"initialString = %@", initialString);
     [initialString deleteCharactersInRange:NSMakeRange([initialString length] - 1, 1)];
   }
+  */
 
   tweetComposer.completionHandler = ^(int result) {
     [[tweetWindow _firstResponder] resignFirstResponder];
