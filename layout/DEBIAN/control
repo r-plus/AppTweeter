@@ -3,7 +3,7 @@ Name: AppTweeter
 Depends: mobilesubstrate, preferenceloader, firmware (>= 5.0)
 Conflicts: gsc.ipad
 Priority: optional
-Version: 0.2
+Version: 0.3
 Architecture: iphoneos-arm
 Description: Tweet about app infomation from AppStore
 Author: r_plus <anasthasia.r+apptweeter@gmail.com>

@@ -18,6 +18,7 @@
 - (id)priceDisplay;
 - (id)itemDictionary;
 - (void)tweetFired;
+- (void)copyiTunesURL;
 @end
 
 @interface AppTweeterHandler : NSObject <UIActionSheetDelegate>
@@ -38,6 +39,8 @@ static BOOL sendMail = NO;
     [pageView _tellAFriendAction:nil];
   } else if (index == 1) {
     [pageView tweetFired];
+  } else if (index == 2) {
+    [pageView copyiTunesURL];
   }
   [self release];
   self = nil;
@@ -59,11 +62,22 @@ static BOOL sendMail = NO;
   UIActionSheet *sheet = [[[UIActionSheet alloc] initWithTitle:nil delegate:handler cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil] autorelease];
   [sheet addButtonWithTitle:@"Mail"];
   [sheet addButtonWithTitle:@"Tweet"];
+  [sheet addButtonWithTitle:@"Copy URL"];
   [sheet setCancelButtonIndex:[sheet addButtonWithTitle:@"Cancel"]];
   [sheet setAlertSheetStyle:UIBarStyleBlackTranslucent];
   [sheet showInView:self];
 }
-   
+ 
+%new(v@:)
+- (void)copyiTunesURL
+{
+  id SUItem = MSHookIvar<id>(self, "_item");
+  NSDictionary *appInfoDict = [SUItem itemDictionary];
+  NSString *url = [appInfoDict objectForKey:@"url"];
+  UIPasteboard *pb = [UIPasteboard generalPasteboard];
+  [pb setString:url];
+}
+
 %new(v@:)
 - (void)tweetFired
 {
