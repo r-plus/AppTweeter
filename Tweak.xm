@@ -17,7 +17,7 @@
 - (id)storeOffers;
 - (id)priceDisplay;
 - (id)itemDictionary;
-- (void)tweetFired;
+- (void)tweetFired:(BOOL)forCopy;
 - (void)copyiTunesURL;
 @end
 
@@ -38,9 +38,11 @@ static BOOL sendMail = NO;
     sendMail = YES;
     [pageView _tellAFriendAction:nil];
   } else if (index == 1) {
-    [pageView tweetFired];
+    [pageView tweetFired:NO];
   } else if (index == 2) {
     [pageView copyiTunesURL];
+  } else if (index == 3) {
+    [pageView tweetFired:YES];
   }
   [self release];
   self = nil;
@@ -63,6 +65,7 @@ static BOOL sendMail = NO;
   [sheet addButtonWithTitle:@"Mail"];
   [sheet addButtonWithTitle:@"Tweet"];
   [sheet addButtonWithTitle:@"Copy URL"];
+  [sheet addButtonWithTitle:@"Copy Tweet"];
   [sheet setCancelButtonIndex:[sheet addButtonWithTitle:@"Cancel"]];
   [sheet setAlertSheetStyle:UIBarStyleBlackTranslucent];
   [sheet showInView:self];
@@ -79,7 +82,7 @@ static BOOL sendMail = NO;
 }
 
 %new(v@:)
-- (void)tweetFired
+- (void)tweetFired:(BOOL)forCopy
 {
   id SUItem = MSHookIvar<id>(self, "_item");
   id SSItemOffer = [SUItem defaultStoreOffer];
@@ -92,6 +95,7 @@ static BOOL sendMail = NO;
   NSString *price = [[[appInfoDict objectForKey:@"store-offers"] objectForKey:@"STDQ"] objectForKey:@"price-display"];
   // URL
   NSURL *url = [NSURL URLWithString:[appInfoDict objectForKey:@"url"]];
+  NSString *urlString = [appInfoDict objectForKey:@"url"];
   // Author
   NSString *author = [[appInfoDict objectForKey:@"company"] objectForKey:@"title"];
   // version
@@ -143,6 +147,13 @@ static BOOL sendMail = NO;
   if ([initialString length] > 87)
     [initialString deleteCharactersInRange:NSMakeRange(87, [initialString length] - 87)];
   [initialString appendFormat:@" #AppTw"];
+  // for Copy
+  if (forCopy) {
+    [initialString appendFormat:@" %@", urlString];
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:initialString];
+    return;
+  }
   // tweet code from libactivator
   tweetComposer = [[objc_getClass("TWTweetComposeViewController") alloc] init];
   if (!tweetComposer)
